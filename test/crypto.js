@@ -34,12 +34,11 @@ describe("Webcrypto", () => {
         });
 
         context("Data", () => {
-
             function TestPrepareData(inData, byteLength) {
                 const outData = webcrypto.PrepareData(inData);
                 assert.equal(outData.byteLength, byteLength);
                 assert.equal(ArrayBuffer.isView(outData), true);
-                const bufInData = new Buffer(Buffer.isBuffer(inData) || inData instanceof ArrayBuffer ? inData : inData.buffer);
+                const bufInData = new Buffer(Buffer.isBuffer(inData) || inData instanceof ArrayBuffer ? inData : inData.buffer.slice(inData.byteOffset, inData.byteOffset + inData.byteLength));
                 const bufOutData = new Buffer(outData);
                 assert.equal(Buffer.compare(bufInData, bufOutData), 0);
             }
@@ -49,14 +48,29 @@ describe("Webcrypto", () => {
                 TestPrepareData(data, 10);
             });
 
+            it("from Uint8ArraySubarray", () => {
+                const data = new Uint8Array([1,2,3,4,5,6,7,8,9,0]);
+                TestPrepareData(data.subarray(2, 7), 5);
+            });
+
             it("from Uint16Array", () => {
                 const data = new Uint16Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
                 TestPrepareData(data, 20);
             });
 
+            it("from Uint16ArraySubarray", () => {
+                const data = new Uint16Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+                TestPrepareData(data.subarray(2,7), 10);
+            });
+
             it("from Uint32Array", () => {
                 const data = new Uint32Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
                 TestPrepareData(data, 40);
+            });
+
+            it("from Uint32Array", () => {
+                const data = new Uint32Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+               TestPrepareData(data.subarray(2,7), 20);
             });
 
             it("from ArrayBuffer", () => {

@@ -23,7 +23,7 @@ export function PrepareData(data: BufferSource, paramName: string): Uint8Array {
         return new Uint8Array(data as Buffer);
     }
     if (ArrayBuffer.isView(data)) {
-        return new Uint8Array(data.buffer);
+        return new Uint8Array(data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
     }
     if (data instanceof ArrayBuffer) {
         return new Uint8Array(data);
