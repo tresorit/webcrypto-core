@@ -265,6 +265,6 @@ declare namespace WebcryptoCore {
 
 }
 
-declare module "webcrypto-core" {
+declare module "tresorit-webcrypto-core" {
     export = WebcryptoCore;
 }
